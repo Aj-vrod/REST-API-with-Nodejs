@@ -1,0 +1,15 @@
+{
+  "name": "rest-api-acc",
+  "version": "1.0.0",
+  "description": "A REST API for amiconsult coding challenge",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "rest-api-with-nodejs"
+  },
+  "author": "Ammy Varela",
+  "license": "ISC"
+}
