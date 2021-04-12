@@ -11,5 +11,10 @@
     "url": "rest-api-with-nodejs"
   },
   "author": "Ammy Varela",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "md5": "^2.3.0",
+    "sqlite3": "^5.0.2"
+  }
 }
