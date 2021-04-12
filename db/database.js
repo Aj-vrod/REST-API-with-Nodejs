@@ -10,12 +10,28 @@ let db = new sqlite3.Database(DB, (error) => {
     throw error
   } else {
     console.log('Connected to the SQLite database')
-    db.run(`CREATE TABLE user (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      name VARCHAR,
-      profilePicture TEXT,
-      token TEXT UNIQUE,
-      CONSTRAINT token_unique UNIQUE (token))`,
+    db.run(`
+      CREATE TABLE users(
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT,
+        profilePicture TEXT,
+        token TEXT UNIQUE NOT NULL,
+        CONSTRAINT token_unique UNIQUE (token));
+      CREATE TABLE rooms(
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT);
+      CREATE TABLE seats(
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        room INTEGER NOT NULL,
+        FOREIGN KEY(room) REFERENCES rooms(id));
+      CREATE TABLE bookings(
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        seat INTEGER NOT NULL,
+        user INTEGER NOT NULL,
+        date TEXT,
+        FOREIGN KEY(seat) REFERENCES seats(id),
+        FOREIGN KEY(user) REFERENCES users(id));
+      `,
       (error) => {
         if (error) {
           console.log('Table already created')
