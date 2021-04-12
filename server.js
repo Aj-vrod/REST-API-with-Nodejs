@@ -25,6 +25,21 @@ app.listen(port, () => {
   });
  });
 
+ app.get('/rest/rooms/:id', (req, res) => {
+  const params = [req.params.id]
+  const query = `SELECT * FROM rooms WHERE id = ?`
+  db.get(query, params, (error, row) => {
+    if (error) {
+      res.status(400).json({"error": error.message});
+      return
+    }
+    res.json({
+      "message": "success",
+      "data": row
+    })
+  });
+ });
+
 // DEFAULT RESPONSE FOR ERRORS
 app.use((req, res) => {
   res.status(404);

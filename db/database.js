@@ -9,29 +9,28 @@ let db = new sqlite3.Database(DB, (error) => {
     console.log(error.message)
     throw error
   } else {
-    console.log('Connected to the SQLite database')
+    console.log('Creating database with SQLite3...')
     db.run(`
       CREATE TABLE users(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT,
         profilePicture TEXT,
         token TEXT UNIQUE NOT NULL,
-        CONSTRAINT token_unique UNIQUE (token));
-      CREATE TABLE rooms(
+        CONSTRAINT token_unique UNIQUE (token));`)
+    db.run(`CREATE TABLE rooms(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT);
-      CREATE TABLE seats(
+        name TEXT);`)
+    db.run(`CREATE TABLE seats(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         room INTEGER NOT NULL,
-        FOREIGN KEY(room) REFERENCES rooms(id));
-      CREATE TABLE bookings(
+        FOREIGN KEY(room) REFERENCES rooms(id));`)
+    db.run(`CREATE TABLE bookings(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         seat INTEGER NOT NULL,
         user INTEGER NOT NULL,
         date TEXT,
         FOREIGN KEY(seat) REFERENCES seats(id),
-        FOREIGN KEY(user) REFERENCES users(id));
-      `,
+        FOREIGN KEY(user) REFERENCES users(id));`,
       (error) => {
         if (error) {
           console.log('Table already created')
@@ -46,7 +45,7 @@ let db = new sqlite3.Database(DB, (error) => {
           const insertSeat1 = 'INSERT INTO seats (room) VALUES (?)'
           db.run(insertSeat1, [1])
           const insertSeat2 = 'INSERT INTO seats (room) VALUES (?)'
-          db.run(insertSeat2, [1])
+          db.run(insertRoom2, [2])
         }
       });
   }
