@@ -36,9 +36,17 @@ let db = new sqlite3.Database(DB, (error) => {
         if (error) {
           console.log('Table already created')
         } else {
-          console.log('Creating some rows')
-          var insert = 'INSERT INTO user (name, profilePicture, token) VALUES (?,?,?)'
-          db.run(insert, ["Malte", "db/user_pictures/user.jpg", "wakndi492jn290n8398"])
+          console.log('Creating some rows...')
+          const insertUser = 'INSERT INTO users (name, profilePicture, token) VALUES (?,?,?)'
+          db.run(insertUser, ["Malte", "db/user_pictures/user.jpg", "wakndi492jn290n8398"])
+          const insertRoom1 = 'INSERT INTO rooms (name) VALUES (?)'
+          db.run(insertRoom1, ["Kaminzimmer"])
+          const insertRoom2 = 'INSERT INTO rooms (name) VALUES (?)'
+          db.run(insertRoom2, ["Konferenzsaal"])
+          const insertSeat1 = 'INSERT INTO seats (room) VALUES (?)'
+          db.run(insertSeat1, [1])
+          const insertSeat2 = 'INSERT INTO seats (room) VALUES (?)'
+          db.run(insertSeat2, [1])
         }
       });
   }

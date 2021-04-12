@@ -10,8 +10,8 @@ app.listen(port, () => {
 })
 
 // GET ROOMS
- app.get('/rest/users', (req, res) => {
-  const query = 'select * from user'
+ app.get('/rest/rooms', (req, res) => {
+  const query = 'SELECT * FROM rooms'
   var params = []
   db.all(query, params, (error, rows) => {
     if (error) {
