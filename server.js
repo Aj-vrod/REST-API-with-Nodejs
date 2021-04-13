@@ -37,7 +37,7 @@ app.listen(port, () => {
 
 // GET SEATS
 app.get('/rest/seats', (req, res) => {
-  const query = `SELECT json_object('id', id, 'room', (SELECT json_group_array(json_object('id', id, 'name', name)) FROM rooms WHERE rooms.id = seats.room)) FROM seats`
+  const query = `SELECT id, (SELECT json_object('id', id, 'name', name) FROM rooms WHERE rooms.id = seats.room) AS room FROM seats`
   const params = []
   db.all(query, params, (error, rows) => {
     if (error) {
@@ -51,7 +51,7 @@ app.get('/rest/seats', (req, res) => {
 // GET SEAT
 app.get('/rest/seats/:id', (req, res) => {
   const params = [req.params.id]
-  const query = 'SELECT * FROM seats WHERE id = ?'
+  const query = `SELECT id, (SELECT json_object('id', id, 'name', name) FROM rooms WHERE rooms.id = seats.room) AS room FROM seats WHERE id = ?`
   db.get(query, params, (error, row) => {
     if (error) {
       res.status(400).json({"error": error.message});
