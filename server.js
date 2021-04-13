@@ -68,11 +68,11 @@ app.get('/rest/seats/:id', (req, res) => {
 
 })
 
-// (SELECT json_object('id', id) FROM seats WHERE bookings.seat = seats.id) AS seat
+// (SELECT json_object('id', id, 'name', name) FROM rooms WHERE rooms.id = seats.room) AS room
 
 // GET BOOKINGS
 app.get('/rest/bookings', (req, res) => {
-  const query = `SELECT id, (SELECT json_object('id', id) FROM seats WHERE bookings.seat = seats.id) AS seat FROM bookings`
+  const query = `SELECT id, (SELECT json_object('id', id, 'room', (SELECT json_object('id', id, 'name', name) FROM rooms WHERE seats.room = rooms.id)) FROM seats WHERE bookings.seat = seats.id) AS seat, date, (SELECT json_object('id', id, 'name', name, 'profilePicture', profilePicture) FROM users WHERE bookings.user = users.id) AS user FROM bookings`
   params = []
   db.all(query, params, (err, rows) => {
     if (err) {
