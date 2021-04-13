@@ -3,7 +3,13 @@ const express = require('express')
 const app = express()
 const path = require('path')
 const db = require(path.join(__dirname, 'db', 'database.js'))
+const md5 = require('md5')
 
+const bodyParser = require("body-parser");
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
+// TRIGGER SERVER
 const port = 3000
 app.listen(port, () => {
   console.log("Server running on port %PORT%".replace("%PORT%",port))
