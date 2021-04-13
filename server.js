@@ -132,6 +132,19 @@ app.post('/rest/bookings', (req, res) => {
   });
 })
 
+// DELETE BOOKING
+app.delete('/rest/bookings/:id', (req, res) => {
+  const query = 'DELETE FROM bookings WHERE id = ?'
+  const params = [req.params.id]
+  db.run(query, params, (err, result) => {
+    if(err) {
+      res.status(400).json({"error": err.message})
+      return;
+    }
+    res.status(200).json({"message":"deleted", changes: this.changes})
+  });
+})
+
 // DEFAULT RESPONSE FOR ERRORS
 app.use((req, res) => {
   res.status(404);
