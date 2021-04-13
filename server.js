@@ -108,6 +108,9 @@ app.post('/rest/bookings', (req, res) => {
   if (!req.body.user) {
     errors.push('No user specified');
   }
+
+  // FUNCTION TO CONVERT DATE FROM STRING TO NUMBER
+
   const regex = new RegExp('/\d{4}-\d{2}-\d{1,2}$/')
   if (!regex.test(req.body.date)) {
     errors.push('Incorrect date format. Must be YYYY-MM-DD')
