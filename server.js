@@ -72,7 +72,7 @@ app.get('/rest/seats/:id', (req, res) => {
 
 // GET BOOKINGS
 app.get('/rest/bookings', (req, res) => {
-  const query = `SELECT id, (SELECT json_object('id', id, 'room', (SELECT json_object('id', id, 'name', name) FROM rooms WHERE seats.room = rooms.id)) FROM seats WHERE bookings.seat = seats.id) AS seat, date, (SELECT json_object('id', id, 'name', name, 'profilePicture', profilePicture) FROM users WHERE bookings.user = users.id) AS user FROM bookings`
+  const query = `SELECT id, (SELECT json_object('id', id, 'room', (SELECT json_object('id', id, 'name', name) FROM rooms WHERE seats.room = rooms.id)) FROM seats WHERE bookings.seat = seats.id) AS seat, datetime(date) AS date, (SELECT json_object('id', id, 'name', name, 'profilePicture', profilePicture) FROM users WHERE bookings.user = users.id) AS user FROM bookings`
   params = []
   db.all(query, params, (err, rows) => {
     if (err) {
@@ -85,7 +85,7 @@ app.get('/rest/bookings', (req, res) => {
 
 // GET BOOKING
 app.get('/rest/bookings/:id', (req, res) => {
-  const query = `SELECT id, (SELECT json_object('id', id, 'room', (SELECT json_object('id', id, 'name', name) FROM rooms WHERE seats.room = rooms.id)) FROM seats WHERE bookings.seat = seats.id) AS seat, date, (SELECT json_object('id', id, 'name', name, 'profilePicture', profilePicture) FROM users WHERE bookings.user = users.id) AS user FROM bookings WHERE id = ?`
+  const query = `SELECT id, (SELECT json_object('id', id, 'room', (SELECT json_object('id', id, 'name', name) FROM rooms WHERE seats.room = rooms.id)) FROM seats WHERE bookings.seat = seats.id) AS seat, datetime(date) AS date, (SELECT json_object('id', id, 'name', name, 'profilePicture', profilePicture) FROM users WHERE bookings.user = users.id) AS user FROM bookings WHERE id = ?`
   const params = [req.params.id]
   db.get(query, params, (err, row) => {
     if (err) {
@@ -118,11 +118,11 @@ app.post('/rest/bookings', (req, res) => {
   }
   var data = {
     seat: req.body.seat,
-    date: new Date(req.body.date),
+    date: req.body.date,
     user: req.body.user
   }
   const query = 'INSERT INTO bookings (seat, date, user) VALUES (?,?,?)'
-  const params = [data.seat, data.date.toString(), data.user]
+  const params = [data.seat, data.date, data.user]
   db.run(query, params, (err, result) => {
     if (err) {
       res.status(400).json({"error": err.message})
