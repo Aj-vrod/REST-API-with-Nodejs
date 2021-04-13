@@ -122,7 +122,7 @@ app.post('/rest/bookings', (req, res) => {
     user: req.body.user
   }
   const query = 'INSERT INTO bookings (seat, date, user) VALUES (?,?,?)'
-  const params = [data.seat, data.date, data.user]
+  const params = [data.seat, data.date.toString(), data.user]
   db.run(query, params, (err, result) => {
     if (err) {
       res.status(400).json({"error": err.message})
