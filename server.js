@@ -18,10 +18,7 @@ app.listen(port, () => {
       res.status(400).json({"error": error.message });
       return;
     }
-    res.json({
-      "message": "success",
-      "data": rows
-    })
+    res.status(200).json(rows)
   });
  });
 
@@ -29,35 +26,41 @@ app.listen(port, () => {
  app.get('/rest/rooms/:id', (req, res) => {
   const params = [req.params.id]
   const query = `SELECT * FROM rooms WHERE id = ?`
-  db.get(query, params, (error, rows) => {
+  db.get(query, params, (error, row) => {
     if (error) {
       res.status(400).json({"error": error.message});
       return
     }
-    res.json({
-      "message": "success",
-      "data": rows
-    })
+    res.status(200).json(row)
   });
  });
 
 // GET SEATS
 app.get('/rest/seats', (req, res) => {
-  const query = 'SELECT * FROM seats'
+  const query = `SELECT json_object('id', id, 'room', (SELECT json_group_array(json_object('id', id, 'name', name)) FROM rooms WHERE rooms.id = seats.room)) FROM seats`
   const params = []
-  db.all(query, params, (error, row) => {
+  db.all(query, params, (error, rows) => {
     if (error) {
       res.status(400).json({"error": error.message});
       return
     }
-    res.json({
-      "message": "success",
-      "data": row
-    })
+    res.status(200).json(rows)
   })
 })
 
+// GET SEAT
+app.get('/rest/seats/:id', (req, res) => {
+  const params = [req.params.id]
+  const query = 'SELECT * FROM seats WHERE id = ?'
+  db.get(query, params, (error, row) => {
+    if (error) {
+      res.status(400).json({"error": error.message});
+      return
+    }
+    res.status(200).json(row)
+  })
 
+})
 
 // DEFAULT RESPONSE FOR ERRORS
 app.use((req, res) => {

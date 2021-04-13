@@ -11,20 +11,20 @@ let db = new sqlite3.Database(DB, (error) => {
   } else {
     console.log('Creating database with SQLite3...')
     db.run(`
-      CREATE TABLE users(
+      CREATE TABLE IF NOT EXISTS users(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT,
         profilePicture TEXT,
         token TEXT UNIQUE NOT NULL,
         CONSTRAINT token_unique UNIQUE (token));`)
-    db.run(`CREATE TABLE rooms(
+    db.run(`CREATE TABLE IF NOT EXISTS rooms(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT);`)
-    db.run(`CREATE TABLE seats(
+    db.run(`CREATE TABLE IF NOT EXISTS seats(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         room INTEGER NOT NULL,
         FOREIGN KEY(room) REFERENCES rooms(id));`)
-    db.run(`CREATE TABLE bookings(
+    db.run(`CREATE TABLE IF NOT EXISTS bookings(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         seat INTEGER NOT NULL,
         user INTEGER NOT NULL,
@@ -36,16 +36,21 @@ let db = new sqlite3.Database(DB, (error) => {
           console.log('Table already created')
         } else {
           console.log('Creating some rows...')
-          const insertUser = 'INSERT INTO users (name, profilePicture, token) VALUES (?,?,?)'
+          const insertUser = 'INSERT OR IGNORE INTO users (name, profilePicture, token) VALUES (?,?,?)'
+          console.log('Creating 1 user...')
           db.run(insertUser, ["Malte", "db/user_pictures/user.jpg", "wakndi492jn290n8398"])
-          const insertRoom1 = 'INSERT INTO rooms (name) VALUES (?)'
-          db.run(insertRoom1, ["Kaminzimmer"])
-          const insertRoom2 = 'INSERT INTO rooms (name) VALUES (?)'
-          db.run(insertRoom2, ["Konferenzsaal"])
-          const insertSeat1 = 'INSERT INTO seats (room) VALUES (?)'
-          db.run(insertSeat1, [1])
-          const insertSeat2 = 'INSERT INTO seats (room) VALUES (?)'
-          db.run(insertRoom2, [2])
+          const insertRoom1 = 'INSERT OR IGNORE INTO rooms (name) VALUES (?)'
+          console.log('Creating Kaminzimmer room...')
+          db.run(insertRoom1, "Kaminzimmer")
+          const insertRoom2 = 'INSERT OR IGNORE INTO rooms (name) VALUES (?)'
+          console.log('Creating Konferenzsaal room...')
+          db.run(insertRoom2, "Konferenzsaal")
+          const insertSeat1 = 'INSERT OR IGNORE INTO seats (room) VALUES (?)'
+          console.log('Creating seat 1...')
+          db.run(insertSeat1, 1)
+          const insertSeat2 = 'INSERT OR IGNORE INTO seats (room) VALUES (?)'
+          console.log('Creating seat 2...')
+          db.run(insertSeat2, 2)
         }
       });
   }
