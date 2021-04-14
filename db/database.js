@@ -14,9 +14,7 @@ let db = new sqlite3.Database(DB, (error) => {
       CREATE TABLE IF NOT EXISTS users(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT,
-        profilePicture TEXT,
-        token TEXT UNIQUE NOT NULL,
-        CONSTRAINT token_unique UNIQUE (token));`)
+        profilePicture TEXT);`)
     db.run(`CREATE TABLE IF NOT EXISTS rooms(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT);`)
@@ -36,8 +34,8 @@ let db = new sqlite3.Database(DB, (error) => {
           console.log(error)
         } else {
           console.log('Creating some rows...')
-          const insertUser = 'INSERT OR IGNORE INTO users (name, profilePicture, token) VALUES (?,?,?)'
-          db.run(insertUser, ["Malte", "db/user_pictures/user.jpg", "wakndi492jn290n8398"])
+          const insertUser = 'INSERT OR IGNORE INTO users (name, profilePicture) VALUES (?,?)'
+          db.run(insertUser, ["Malte", "db/user_pictures/user.jpg"])
           const insertRoom1 = 'INSERT OR IGNORE INTO rooms (name) VALUES (?)'
           db.run(insertRoom1, "Kaminzimmer")
           const insertRoom2 = 'INSERT OR IGNORE INTO rooms (name) VALUES (?)'
