@@ -1,7 +1,6 @@
 const db = require('../db/database.js')
 const checkErrors = require('../helpers/errors')
 const testTimeSpan = require('../helpers/timespan')
-const jwt = require('jsonwebtoken')
 
 const index = (req, res) => {
   const query = `SELECT id, (SELECT json_object('id', id, 'room', (SELECT json_object('id', id, 'name', name) FROM rooms WHERE seats.room = rooms.id)) FROM seats WHERE bookings.seat = seats.id) AS seat, datetime(date) AS date, (SELECT json_object('id', id, 'name', name, 'profilePicture', profilePicture) FROM users WHERE bookings.user = users.id) AS user FROM bookings`
@@ -19,23 +18,6 @@ const show = (req, res) => {
     checkErrors(err, res)
     res.status(200).json(row)
   })
-}
-
-const verifyToken = (req, res, next) => {
-  const bearerHeader = req.headers['authorization'];
-  if (typeof bearerHeader !== 'undefined') {
-    const bearerToken = bearerHeader.split(" ")[1];
-    req.token = bearerToken;
-    jwt.verify(bearerToken, 'secretToken', (err, user) => {
-      if (err) {
-        res.status(403).json({ "message": "403 Unauthorized action"})
-      }
-      req.userId = user.user[0].id
-      next();
-    })
-  } else {
-    res.status(403).json({ "message": "403 Unauthorized action" })
-  }
 }
 
 const create = (req, res) => {
@@ -109,6 +91,5 @@ module.exports = {
   index,
   show,
   create,
-  destroy,
-  verifyToken
+  destroy
 }

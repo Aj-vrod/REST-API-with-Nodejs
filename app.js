@@ -31,12 +31,13 @@ app.get('/rest/seats/:id', seatsController.show)
 
 // BOOKINGS ROUTES
 const bookingsController = require('./controllers/bookings.controller')
+const verifyToken = require('./helpers/verifyToken')
 // GET BOOKINGS
 app.get('/rest/bookings', bookingsController.index)
 // GET BOOKING
 app.get('/rest/bookings/:id', bookingsController.show)
 // POST BOOKING
-app.post('/rest/bookings', bookingsController.verifyToken, bookingsController.create)
+app.post('/rest/bookings', verifyToken, bookingsController.create)
 // DELETE BOOKING
 app.delete('/rest/bookings/:id', bookingsController.destroy)
 
