@@ -37,22 +37,16 @@ let db = new sqlite3.Database(DB, (error) => {
         } else {
           console.log('Creating some rows...')
           const insertUser = 'INSERT OR IGNORE INTO users (name, profilePicture, token) VALUES (?,?,?)'
-          console.log('Creating 1 user...')
           db.run(insertUser, ["Malte", "db/user_pictures/user.jpg", "wakndi492jn290n8398"])
           const insertRoom1 = 'INSERT OR IGNORE INTO rooms (name) VALUES (?)'
-          console.log('Creating Kaminzimmer room...')
           db.run(insertRoom1, "Kaminzimmer")
           const insertRoom2 = 'INSERT OR IGNORE INTO rooms (name) VALUES (?)'
-          console.log('Creating Konferenzsaal room...')
           db.run(insertRoom2, "Konferenzsaal")
           const insertSeat1 = 'INSERT INTO seats (room) VALUES (?)'
-          console.log('Creating seat 1...')
           db.run(insertSeat1, 1)
           const insertSeat2 = 'INSERT INTO seats (room) VALUES (?)'
-          console.log('Creating seat 2...')
           db.run(insertSeat2, 2)
           const insertBooking = 'INSERT INTO bookings (seat, date, user) VALUES (?,?,?)'
-          console.log('Creating one booking...')
           db.run(insertBooking, [1, "2021-01-08T00:00:00.000", 1])
         }
       });
