@@ -20,6 +20,8 @@ const show = (req, res) => {
 }
 
 // HELPER FUNCTIONS
+const testTimeSpan = require('../helpers/timespan')
+
 const checkInputErrors = (req, res) => {
   var errors = []
   if (!req.body.date) {
@@ -55,20 +57,19 @@ const checkInputErrors = (req, res) => {
     }
     errors.push(error);
   }
+  if (!testTimeSpan(req.body.date)) {
+    error = {
+      msg: 'Invalid value. Booking date must be within the next 7 days',
+      param: 'date',
+      location: 'body'
+    }
+    errors.push(error);
+  }
   if (errors.length) {
     res.status(400).json({"errors": errors});
     return
   }
 }
-
-
-const testTimeSpanForNewBooking = (date) => {
-  const providedDate = new Date(date);
-  let limitDate = new Date();
-  limitDate = new Date(limitDate.setDate(limitDate.getDate() + 7));
-  imitDate > providedDate ? true : false
-}
-
 // END OF HELPER FUNCTIONS
 
 const create = (req, res) => {
