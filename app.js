@@ -3,7 +3,6 @@ const express = require('express')
 const app = express()
 const path = require('path')
 const db = require(path.join(__dirname, 'db', 'database'))
-const jwt = require('jsonwebtoken')
 
 // USING BODY-PARSER TO PARSE BODY DATA FROM REQUESTS
 const bodyParser = require("body-parser");

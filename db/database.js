@@ -44,8 +44,6 @@ let db = new sqlite3.Database(DB, (error) => {
           db.run(insertSeat1, 1)
           const insertSeat2 = 'INSERT INTO seats (room) VALUES (?)'
           db.run(insertSeat2, 2)
-          // const insertBooking = 'INSERT INTO bookings (seat, date, user) VALUES (?,?,?)'
-          // db.run(insertBooking, [1, "2021-01-08T00:00:00.000", 1])
         }
       });
   }
