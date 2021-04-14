@@ -1,3 +1,12 @@
+const jwt = require('jsonwebtoken')
+const db = require('../db/database.js')
+
+const home = (req, res) => {
+  res.json({
+    "message": "Welcome to our Office Booking API"
+  })
+}
+
 const login = (req, res) => {
   const query = 'SELECT name FROM users WHERE name = ?'
   params = [req.headers['name']]
@@ -19,4 +28,7 @@ const login = (req, res) => {
   })
 }
 
-module.exports = login
+module.exports = {
+  login,
+  home
+}
