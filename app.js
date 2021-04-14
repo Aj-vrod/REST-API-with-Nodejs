@@ -34,7 +34,7 @@ app.post('/rest/bookings', bookingsController.create)
 // DELETE BOOKING
 app.delete('/rest/bookings/:id', bookingsController.destroy)
 
-// DEFAULT RESPONSE FOR ERRORS
+// DEFAULT RESPONSE FOR OTHER ERRORS
 app.use((req, res) => {
   res.status(404);
 })
