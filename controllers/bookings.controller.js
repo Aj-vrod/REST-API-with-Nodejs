@@ -77,7 +77,7 @@ const create = (req, res) => {
   const params = [data.seat, data.date, data.user]
   db.run(query, params, (err, result) => {
     if (err) {
-      res.status(400).json({"error": "A database error occurred"})
+      res.status(500).json({"error": "A database error occurred"})
       return;
     }
     res.status(200).json(data)
