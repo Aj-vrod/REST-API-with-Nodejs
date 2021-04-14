@@ -4,68 +4,26 @@ const path = require('path')
 const db = require(path.join(__dirname, 'db', 'database'))
 const md5 = require('md5')
 
-
+// ROOMS ROUTES
 const roomsController = require('./controllers/rooms.controller')
 // GET ROOMS
  app.get('/rest/rooms', roomsController.roomsIndex);
-
 // GET ROOM
  app.get('/rest/rooms/:id', roomsController.roomShow);
 
+// SEATS ROUTES
+const seatsController = require('./controllers/seats.controller')
 // GET SEATS
-app.get('/rest/seats', (req, res) => {
-  const query = `SELECT id, (SELECT json_object('id', id, 'name', name) FROM rooms WHERE rooms.id = seats.room) AS room FROM seats`
-  const params = []
-  db.all(query, params, (error, rows) => {
-    if (error) {
-      res.status(400).json({"error": error.message});
-      return
-    }
-    res.status(200).json(rows)
-  })
-})
-
+app.get('/rest/seats', seatsController.seatsIndex)
 // GET SEAT
-app.get('/rest/seats/:id', (req, res) => {
-  const params = [req.params.id]
-  const query = `SELECT id, (SELECT json_object('id', id, 'name', name) FROM rooms WHERE rooms.id = seats.room) AS room FROM seats WHERE id = ?`
-  db.get(query, params, (error, row) => {
-    if (error) {
-      res.status(400).json({"error": error.message});
-      return
-    }
-    res.status(200).json(row)
-  })
+app.get('/rest/seats/:id', seatsController.seatsShow)
 
-})
-
-// BASIC JSON_OBJECT = (SELECT json_object('id', id, 'name', name) FROM rooms WHERE rooms.id = seats.room) AS room
-
+// BOOKINGS ROUTES
+const bookingsController = require('./controllers/bookings.controller')
 // GET BOOKINGS
-app.get('/rest/bookings', (req, res) => {
-  const query = `SELECT id, (SELECT json_object('id', id, 'room', (SELECT json_object('id', id, 'name', name) FROM rooms WHERE seats.room = rooms.id)) FROM seats WHERE bookings.seat = seats.id) AS seat, datetime(date) AS date, (SELECT json_object('id', id, 'name', name, 'profilePicture', profilePicture) FROM users WHERE bookings.user = users.id) AS user FROM bookings`
-  params = []
-  db.all(query, params, (err, rows) => {
-    if (err) {
-      res.status(400).json({"error": err.message})
-      return
-    }
-    res.status(200).json(rows)
-  })
-})
-
+app.get('/rest/bookings', bookingsController.bookingsIndex)
 // GET BOOKING
-app.get('/rest/bookings/:id', (req, res) => {
-  const query = `SELECT id, (SELECT json_object('id', id, 'room', (SELECT json_object('id', id, 'name', name) FROM rooms WHERE seats.room = rooms.id)) FROM seats WHERE bookings.seat = seats.id) AS seat, datetime(date) AS date, (SELECT json_object('id', id, 'name', name, 'profilePicture', profilePicture) FROM users WHERE bookings.user = users.id) AS user FROM bookings WHERE id = ?`
-  const params = [req.params.id]
-  db.get(query, params, (err, row) => {
-    if (err) {
-      res.status(400).json({"error": err.message})
-      return
-    }
-    res.status(200).json(row)
-  })
-})
+app.get('/rest/bookings/:id', bookingsController.bookingsShow)
 
 // POST BOOKING
 app.post('/rest/bookings', (req, res) => {
