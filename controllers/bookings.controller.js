@@ -19,6 +19,7 @@ const show = (req, res) => {
   })
 }
 
+// HELPER FUNCTIONS
 const checkInputErrors = (req, res) => {
   var errors = []
   if (!req.body.date) {
@@ -60,6 +61,16 @@ const checkInputErrors = (req, res) => {
   }
 }
 
+
+const testTimeSpanForNewBooking = (date) => {
+  const providedDate = new Date(date);
+  let limitDate = new Date();
+  limitDate = new Date(limitDate.setDate(limitDate.getDate() + 7));
+  imitDate > providedDate ? true : false
+}
+
+// END OF HELPER FUNCTIONS
+
 const create = (req, res) => {
   checkInputErrors(req, res)
   var data = {
@@ -94,6 +105,5 @@ module.exports = {
   index,
   show,
   create,
-  destroy,
-  checkErrors
+  destroy
 }

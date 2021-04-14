@@ -1,9 +1,7 @@
-const testTimeSpanForNewBooking = (date) => {
-  const providedDate = new Date(date);
-  let limitDate = new Date();
-  limitDate = new Date(limitDate.setDate(limitDate.getDate() + 7));
-  const check = limitDate > providedDate ? true : false
-  console.log(check)
-}
+const testTimeSpanForNewBooking = require('../helpers/timespan')
 
-testTimeSpanForNewBooking('2021-04-21')
+describe('bookings', () => {
+  test('timespan', () => {
+    expect(testTimeSpanForNewBooking('2021-04-20')).toBe(true)
+  })
+})
