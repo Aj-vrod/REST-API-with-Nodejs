@@ -39,7 +39,7 @@ app.get('/rest/bookings/:id', bookingsController.show)
 // POST BOOKING
 app.post('/rest/bookings', verifyToken, bookingsController.create)
 // DELETE BOOKING
-app.delete('/rest/bookings/:id', bookingsController.destroy)
+app.delete('/rest/bookings/:id', verifyToken, bookingsController.destroy)
 
 // DEFAULT RESPONSE FOR OTHER ERRORS
 app.use((req, res) => {

@@ -49,6 +49,6 @@ let db = new sqlite3.Database(DB, (error) => {
   }
 });
 
-// CHECK! DOES NOT ACCEPT PRAGMA FOREIGN_KEYS = ON AFTER RUNNING FIRST TIME
+// CHECK! RUN TWICE IF FOREIGN_KEYS RETURN AN ERROR
 
 module.exports = db

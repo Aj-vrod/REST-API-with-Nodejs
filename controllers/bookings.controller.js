@@ -41,13 +41,19 @@ const create = (req, res, next) => {
 const destroy = (req, res) => {
   const query = 'DELETE FROM bookings WHERE id = ?'
   const params = [req.params.id]
-  db.run(query, params, (err, result) => {
-    if(err) {
-      res.status(400).json({"error": err.message})
-      return;
-    }
-    res.status(200).json({"message":"deleted", changes: this.changes})
-  });
+  const user_id = parseInt(params[0])
+  if (user_id === req.userId) {
+    db.run(query, params, (err, result) => {
+      if(err) {
+        res.status(400).json({"error": "A database error occurred"})
+        return;
+      }
+      res.status(200).json({ "message": "deleted" })
+    });
+  } else {
+    res.status(403).json({ "message": "403 Unauthorized action" })
+  }
+
 }
 
 module.exports = {
