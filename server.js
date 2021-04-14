@@ -1,6 +1,7 @@
-// USING EXPRESS INSTEAD OF HTTP
+// REQUIRING APP INSTANCE
 const app = require('./app.js')
 
+// USING BODY-PARSER TO PARSE BODY DATA FROM REQUESTS
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());

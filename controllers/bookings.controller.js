@@ -24,7 +24,56 @@ const bookingsShow = (req, res) => {
   })
 }
 
+const bookingsCreate = (req, res) => {
+  var errors = []
+  if (!req.body.date) {
+    errors.push('No date specified');
+  }
+  if (!req.body.seat) {
+    errors.push('No seat specified');
+  }
+  if (!req.body.user) {
+    errors.push('No user specified');
+  }
+  const regex = new RegExp('[0-9]{4}-[0-9]{2}-[0-9]{1,2}$')
+  if (!regex.test(req.body.date)) {
+    errors.push('Incorrect date format. Must be YYYY-MM-DD')
+  }
+  if (errors.length) {
+    res.status(400).json({"error": errors.join(", ")});
+    return
+  }
+  var data = {
+    seat: req.body.seat,
+    date: req.body.date,
+    user: req.body.user
+  }
+  const query = 'INSERT INTO bookings (seat, date, user) VALUES (?,?,?)'
+  const params = [data.seat, data.date, data.user]
+  db.run(query, params, (err, result) => {
+    if (err) {
+      res.status(400).json({"error": err.message})
+      return;
+    }
+    res.status(200).json(data)
+  });
+}
+
+const bookingsDestroy = (req, res) => {
+  const query = 'DELETE FROM bookings WHERE id = ?'
+  const params = [req.params.id]
+  db.run(query, params, (err, result) => {
+    if(err) {
+      res.status(400).json({"error": err.message})
+      return;
+    }
+    res.status(200).json({"message":"deleted", changes: this.changes})
+  });
+}
+
 module.exports = {
   bookingsIndex,
-  bookingsShow
+  bookingsShow,
+  bookingsCreate,
+  bookingsDestroy
 }
