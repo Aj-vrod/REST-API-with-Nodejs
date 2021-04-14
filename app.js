@@ -4,6 +4,11 @@ const app = express()
 const path = require('path')
 const db = require(path.join(__dirname, 'db', 'database'))
 
+// USING BODY-PARSER TO PARSE BODY DATA FROM REQUESTS
+const bodyParser = require("body-parser");
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
 // ROOMS ROUTES
 const roomsController = require('./controllers/rooms.controller')
 // GET ROOMS
