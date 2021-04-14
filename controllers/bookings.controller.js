@@ -19,7 +19,7 @@ const show = (req, res) => {
   })
 }
 
-const create = (req, res) => {
+const checkInputErrors = (req, res) => {
   var errors = []
   if (!req.body.date) {
     error = {
@@ -58,6 +58,10 @@ const create = (req, res) => {
     res.status(400).json({"errors": errors});
     return
   }
+}
+
+const create = (req, res) => {
+  checkInputErrors(req, res)
   var data = {
     seat: req.body.seat,
     date: req.body.date,
@@ -67,7 +71,7 @@ const create = (req, res) => {
   const params = [data.seat, data.date, data.user]
   db.run(query, params, (err, result) => {
     if (err) {
-      res.status(400).json({"error": err.message})
+      res.status(500).json({"error": "A database error occurred"})
       return;
     }
     res.status(200).json(data)
