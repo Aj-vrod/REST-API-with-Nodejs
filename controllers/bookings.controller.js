@@ -1,6 +1,6 @@
 const db = require('../db/database.js')
 
-const bookingsIndex = (req, res) => {
+const index = (req, res) => {
   const query = `SELECT id, (SELECT json_object('id', id, 'room', (SELECT json_object('id', id, 'name', name) FROM rooms WHERE seats.room = rooms.id)) FROM seats WHERE bookings.seat = seats.id) AS seat, datetime(date) AS date, (SELECT json_object('id', id, 'name', name, 'profilePicture', profilePicture) FROM users WHERE bookings.user = users.id) AS user FROM bookings`
   params = []
   db.all(query, params, (err, rows) => {
@@ -12,7 +12,7 @@ const bookingsIndex = (req, res) => {
   })
 }
 
-const bookingsShow = (req, res) => {
+const show = (req, res) => {
   const query = `SELECT id, (SELECT json_object('id', id, 'room', (SELECT json_object('id', id, 'name', name) FROM rooms WHERE seats.room = rooms.id)) FROM seats WHERE bookings.seat = seats.id) AS seat, datetime(date) AS date, (SELECT json_object('id', id, 'name', name, 'profilePicture', profilePicture) FROM users WHERE bookings.user = users.id) AS user FROM bookings WHERE id = ?`
   const params = [req.params.id]
   db.get(query, params, (err, row) => {
@@ -24,7 +24,7 @@ const bookingsShow = (req, res) => {
   })
 }
 
-const bookingsCreate = (req, res) => {
+const create = (req, res) => {
   var errors = []
   if (!req.body.date) {
     errors.push('No date specified');
@@ -59,7 +59,7 @@ const bookingsCreate = (req, res) => {
   });
 }
 
-const bookingsDestroy = (req, res) => {
+const destroy = (req, res) => {
   const query = 'DELETE FROM bookings WHERE id = ?'
   const params = [req.params.id]
   db.run(query, params, (err, result) => {
@@ -72,8 +72,8 @@ const bookingsDestroy = (req, res) => {
 }
 
 module.exports = {
-  bookingsIndex,
-  bookingsShow,
-  bookingsCreate,
-  bookingsDestroy
+  index,
+  show,
+  create,
+  destroy
 }

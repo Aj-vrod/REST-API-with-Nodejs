@@ -12,27 +12,27 @@ app.use(bodyParser.json());
 // ROOMS ROUTES
 const roomsController = require('./controllers/rooms.controller')
 // GET ROOMS
- app.get('/rest/rooms', roomsController.roomsIndex);
+ app.get('/rest/rooms', roomsController.index);
 // GET ROOM
- app.get('/rest/rooms/:id', roomsController.roomShow);
+ app.get('/rest/rooms/:id', roomsController.show);
 
 // SEATS ROUTES
 const seatsController = require('./controllers/seats.controller')
 // GET SEATS
-app.get('/rest/seats', seatsController.seatsIndex)
+app.get('/rest/seats', seatsController.index)
 // GET SEAT
-app.get('/rest/seats/:id', seatsController.seatsShow)
+app.get('/rest/seats/:id', seatsController.show)
 
 // BOOKINGS ROUTES
 const bookingsController = require('./controllers/bookings.controller')
 // GET BOOKINGS
-app.get('/rest/bookings', bookingsController.bookingsIndex)
+app.get('/rest/bookings', bookingsController.index)
 // GET BOOKING
-app.get('/rest/bookings/:id', bookingsController.bookingsShow)
+app.get('/rest/bookings/:id', bookingsController.show)
 // POST BOOKING
-app.post('/rest/bookings', bookingsController.bookingsCreate)
+app.post('/rest/bookings', bookingsController.create)
 // DELETE BOOKING
-app.delete('/rest/bookings/:id', bookingsController.bookingsDestroy)
+app.delete('/rest/bookings/:id', bookingsController.destroy)
 
 // DEFAULT RESPONSE FOR ERRORS
 app.use((req, res) => {

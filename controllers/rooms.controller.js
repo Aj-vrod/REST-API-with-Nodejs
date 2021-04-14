@@ -1,6 +1,6 @@
 const db = require('../db/database.js')
 
-const roomsIndex = (req, res) => {
+const index = (req, res) => {
   const query = 'SELECT * FROM rooms'
   var params = []
   db.all(query, params, (error, rows) => {
@@ -12,7 +12,7 @@ const roomsIndex = (req, res) => {
   });
  }
 
- const roomShow = (req, res) => {
+ const show = (req, res) => {
   const params = [req.params.id]
   const query = `SELECT * FROM rooms WHERE id = ?`
   db.get(query, params, (error, row) => {
@@ -25,6 +25,6 @@ const roomsIndex = (req, res) => {
  }
 
 module.exports = {
-  roomsIndex,
-  roomShow
+  index,
+  show
 }
