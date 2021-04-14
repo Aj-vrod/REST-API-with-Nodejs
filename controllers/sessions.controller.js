@@ -8,14 +8,14 @@ const home = (req, res) => {
 }
 
 const login = (req, res) => {
-  const query = 'SELECT name FROM users WHERE name = ?'
+  const query = 'SELECT name, id FROM users WHERE name = ?'
   params = [req.headers['name']]
   db.all(query, params, (err, user) => {
     if (err) {
       res.status(400).json(err.message)
       return
     } else if (user.length) {
-      jwt.sign({user: user}, 'secretToken', (err, token) => {
+      jwt.sign({user: user, userId: user.id}, 'secretToken', (err, token) => {
         res.json({
           token,
         })

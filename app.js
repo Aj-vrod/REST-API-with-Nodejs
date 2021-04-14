@@ -36,7 +36,7 @@ app.get('/rest/bookings', bookingsController.index)
 // GET BOOKING
 app.get('/rest/bookings/:id', bookingsController.show)
 // POST BOOKING
-app.post('/rest/bookings', bookingsController.create)
+app.post('/rest/bookings', bookingsController.verifyToken, bookingsController.create)
 // DELETE BOOKING
 app.delete('/rest/bookings/:id', bookingsController.destroy)
 
