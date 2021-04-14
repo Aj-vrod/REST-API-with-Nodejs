@@ -8,8 +8,8 @@ let db = new sqlite3.Database(DB, (error) => {
     console.log(error.message)
     throw error
   } else {
-    console.log('Creating database with SQLite3...')
     db.run(`pragma foreign_keys=on`)
+    console.log('Creating database with SQLite3...')
     db.run(`
       CREATE TABLE IF NOT EXISTS users(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -33,7 +33,7 @@ let db = new sqlite3.Database(DB, (error) => {
         FOREIGN KEY(user) REFERENCES users(id));`,
       (error) => {
         if (error) {
-          console.log('Table created')
+          console.log(error)
         } else {
           console.log('Creating some rows...')
           const insertUser = 'INSERT OR IGNORE INTO users (name, profilePicture, token) VALUES (?,?,?)'
