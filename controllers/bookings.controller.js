@@ -1,6 +1,6 @@
 const db = require('../db/database.js')
 const checkErrors = require('../helpers/errors')
-const testTimeSpan = require('../helpers/timespan')
+const checkInput = require('../helpers/checkInput')
 
 const index = (req, res) => {
   const query = `SELECT id, (SELECT json_object('id', id, 'room', (SELECT json_object('id', id, 'name', name) FROM rooms WHERE seats.room = rooms.id)) FROM seats WHERE bookings.seat = seats.id) AS seat, datetime(date) AS date, (SELECT json_object('id', id, 'name', name, 'profilePicture', profilePicture) FROM users WHERE bookings.user = users.id) AS user FROM bookings`
@@ -20,45 +20,8 @@ const show = (req, res) => {
   })
 }
 
-const create = (req, res) => {
-  var errors = []
-  if (!req.body.date) {
-    error = {
-      msg: 'No date specified',
-      param: 'date',
-      location: 'body'
-    }
-    errors.push(error);
-  }
-  if (!req.body.seat) {
-    error = {
-      msg: 'No seat specified',
-      param: 'seat',
-      location: 'body'
-    }
-    errors.push(error);
-  }
-  const regex = new RegExp('[0-9]{4}-[0-9]{2}-[0-9]{1,2}$')
-  if (!regex.test(req.body.date)) {
-    error = {
-      msg: 'Invalid value. Must be YYYY-MM-DD',
-      param: 'date',
-      location: 'body'
-    }
-    errors.push(error);
-  }
-  if (testTimeSpan(req.body.date) === false) {
-    error = {
-      msg: 'Invalid value. Booking date must be within the next 7 days',
-      param: 'date',
-      location: 'body'
-    }
-    errors.push(error);
-  }
-  if (errors.length) {
-    res.status(400).json({"errors": errors});
-    return
-  }
+const create = (req, res, next) => {
+  checkInput(req, res, next)
   var data = {
     seat: req.body.seat,
     date: req.body.date,
