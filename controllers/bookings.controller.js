@@ -19,10 +19,9 @@ const show = (req, res) => {
   })
 }
 
-// HELPER FUNCTIONS
 const testTimeSpan = require('../helpers/timespan')
 
-const checkInputErrors = (req, res) => {
+const create = (req, res) => {
   var errors = []
   if (!req.body.date) {
     error = {
@@ -57,7 +56,7 @@ const checkInputErrors = (req, res) => {
     }
     errors.push(error);
   }
-  if (!testTimeSpan(req.body.date)) {
+  if (testTimeSpan(req.body.date) === false) {
     error = {
       msg: 'Invalid value. Booking date must be within the next 7 days',
       param: 'date',
@@ -69,11 +68,6 @@ const checkInputErrors = (req, res) => {
     res.status(400).json({"errors": errors});
     return
   }
-}
-// END OF HELPER FUNCTIONS
-
-const create = (req, res) => {
-  checkInputErrors(req, res)
   var data = {
     seat: req.body.seat,
     date: req.body.date,
@@ -83,7 +77,7 @@ const create = (req, res) => {
   const params = [data.seat, data.date, data.user]
   db.run(query, params, (err, result) => {
     if (err) {
-      res.status(500).json({"error": "A database error occurred"})
+      res.status(400).json({"error": "A database error occurred"})
       return;
     }
     res.status(200).json(data)
