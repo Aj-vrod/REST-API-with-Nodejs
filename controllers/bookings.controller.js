@@ -22,20 +22,40 @@ const show = (req, res) => {
 const create = (req, res) => {
   var errors = []
   if (!req.body.date) {
-    errors.push('No date specified');
+    error = {
+      msg: 'No date specified',
+      param: 'date',
+      location: 'body'
+    }
+    errors.push(error);
   }
   if (!req.body.seat) {
-    errors.push('No seat specified');
+    error = {
+      msg: 'No seat specified',
+      param: 'seat',
+      location: 'body'
+    }
+    errors.push(error);
   }
   if (!req.body.user) {
-    errors.push('No user specified');
+    error = {
+      msg: 'No user specified',
+      param: 'user',
+      location: 'body'
+    }
+    errors.push(error);
   }
   const regex = new RegExp('[0-9]{4}-[0-9]{2}-[0-9]{1,2}$')
   if (!regex.test(req.body.date)) {
-    errors.push('Incorrect date format. Must be YYYY-MM-DD')
+    error = {
+      msg: 'Invalid value. Must be YYYY-MM-DD',
+      param: 'date',
+      location: 'body'
+    }
+    errors.push(error);
   }
   if (errors.length) {
-    res.status(400).json({"error": errors.join(", ")});
+    res.status(400).json({"errors": errors});
     return
   }
   var data = {
