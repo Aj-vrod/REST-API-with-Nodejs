@@ -5,22 +5,12 @@ const db = require(path.join(__dirname, 'db', 'database'))
 const md5 = require('md5')
 
 
+const roomsController = require('./controllers/rooms.controller')
 // GET ROOMS
-const roomsIndex = require('./controllers/rooms.controller')
- app.get('/rest/rooms', roomsIndex);
+ app.get('/rest/rooms', roomsController.roomsIndex);
 
 // GET ROOM
- app.get('/rest/rooms/:id', (req, res) => {
-  const params = [req.params.id]
-  const query = `SELECT * FROM rooms WHERE id = ?`
-  db.get(query, params, (error, row) => {
-    if (error) {
-      res.status(400).json({"error": error.message});
-      return
-    }
-    res.status(200).json(row)
-  });
- });
+ app.get('/rest/rooms/:id', roomsController.roomShow);
 
 // GET SEATS
 app.get('/rest/seats', (req, res) => {
