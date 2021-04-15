@@ -30,10 +30,14 @@ const show = (req, res) => {
   // RETRIEVES INSTANCE OF BOOKING
   db.get(query, params, (err, row) => {
     checkErrors(err, res)
-    // TRANSFORMS STRINGS OF DATA INTO JSON
-    row.seat = JSON.parse(row.seat)
-    row.user = JSON.parse(row.user)
-    res.status(200).json(row)
+    if (row) {
+      // TRANSFORMS STRINGS OF DATA INTO JSON
+      row.seat = JSON.parse(row.seat)
+      row.user = JSON.parse(row.user)
+      res.status(200).json(row)
+    } else {
+      res.status(200).json({})
+    }
   })
 }
 
