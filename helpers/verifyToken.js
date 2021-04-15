@@ -16,9 +16,11 @@ const verifyToken = (req, res, next) => {
       })
     } else {
       res.status(403).json({ "message": "403 Unauthorized action" })
+      return
     }
   } else {
     res.status(403).json({ "message": "403 Unauthorized action"})
+    return
   }
 }
 

@@ -1,10 +1,12 @@
 const db = require('../db/database.js')
 const checkErrors = require('../helpers/errors')
 const checkInput = require('../helpers/checkInput')
+const limitPastBookings = require('../helpers/limitBookingsIndex')
 
 const index = (req, res) => {
-  const query = `SELECT id, (SELECT json_object('id', id, 'room', (SELECT json_object('id', id, 'name', name) FROM rooms WHERE seats.room = rooms.id)) FROM seats WHERE bookings.seat = seats.id) AS seat, datetime(date) AS date, (SELECT json_object('id', id, 'name', name, 'profilePicture', profilePicture) FROM users WHERE bookings.user = users.id) AS user FROM bookings`
-  params = []
+  const query = `SELECT id, (SELECT json_object('id', id, 'room', (SELECT json_object('id', id, 'name', name) FROM rooms WHERE seats.room = rooms.id)) FROM seats WHERE bookings.seat = seats.id) AS seat, datetime(date) AS date, (SELECT json_object('id', id, 'name', name, 'profilePicture', profilePicture) FROM users WHERE bookings.user = users.id) AS user FROM bookings WHERE bookings.date > ?`
+  const twoWeeksAgo = limitPastBookings()
+  params = [twoWeeksAgo]
   db.all(query, params, (err, rows) => {
     checkErrors(err, res)
     res.status(200).json(rows)
@@ -21,21 +23,22 @@ const show = (req, res) => {
 }
 
 const create = (req, res, next) => {
-  checkInput(req, res, next)
-  var data = {
-    seat: req.body.seat,
-    date: req.body.date,
-    user: req.userId
-  }
-  const query = `INSERT INTO bookings (seat, date, user) VALUES (?,?,?)`
-  const params = [data.seat, data.date, data.user]
-  db.run(query, params, (err, result) => {
-    if (err) {
-      res.status(500).json({"error": "A database error occurred"})
-      return;
+  if (checkInput(req, res, next)) {
+    var data = {
+      seat: req.body.seat,
+      date: req.body.date,
+      user: req.userId
     }
-    res.status(200).json(data)
-  });
+    const query = `INSERT INTO bookings (seat, date, user) VALUES (?,?,?)`
+    const params = [data.seat, data.date, data.user]
+    db.run(query, params, (err, result) => {
+      if (err) {
+        res.status(500).json({"error": "A database error occurred"})
+        return;
+      }
+      res.status(200).json(data)
+    });
+  }
 }
 
 const destroy = (req, res) => {
