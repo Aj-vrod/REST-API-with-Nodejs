@@ -9,6 +9,10 @@ const index = (req, res) => {
   params = [twoWeeksAgo]
   db.all(query, params, (err, rows) => {
     checkErrors(err, res)
+    rows.forEach( (row) => {
+      row.seat = JSON.parse(row.seat);
+      row.user = JSON.parse(row.user)
+    })
     res.status(200).json(rows)
   })
 }
@@ -18,6 +22,8 @@ const show = (req, res) => {
   const params = [req.params.id]
   db.get(query, params, (err, row) => {
     checkErrors(err, res)
+    row.seat = JSON.parse(row.seat)
+    row.user = JSON.parse(row.user)
     res.status(200).json(row)
   })
 }
