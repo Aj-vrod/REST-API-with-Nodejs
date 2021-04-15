@@ -39,23 +39,28 @@ const create = (req, res, next) => {
       if (err) {
         res.status(500).json({"error": "A database error occurred"})
         return;
-      } else if (bookings.length === 0) {
-        res.status(404).json({ "error": "Seat not found" })
+      } else if (bookings.length > 0 && bookings.filter(function(e) { return e.seat === parseInt(data.seat); }).length > 0) {
+        res.status(400).json({ "error": "This seat is already taken" })
         return;
-      } else if (bookings) {
-        if (bookings.filter(function(e) { return e.seat === parseInt(data.seat); }).length > 0) {
-          res.status(400).json({ "error": "This seat is already taken" })
-          return;
-        }
-        const query = `INSERT INTO bookings (seat, date, user) VALUES (?,?,?)`
-        const params = [data.seat, data.date, data.user]
-        db.run(query, params, (err, result) => {
+      } else {
+        db.get('SELECT id FROM seats WHERE id = ?', data.seat, (err, result) => {
           if (err) {
             res.status(500).json({"error": "A database error occurred"})
+          } else if (result) {
+            const query = `INSERT INTO bookings (seat, date, user) VALUES (?,?,?)`
+            const params = [data.seat, data.date, data.user]
+            db.run(query, params, (err, result) => {
+              if (err) {
+                res.status(500).json({"error": "A database error occurred"})
+                return;
+              }
+              res.status(200).json(data)
+            });
+          } else {
+            res.status(404).json({ "error": "Seat not found" })
             return;
           }
-          res.status(200).json(data)
-        });
+        })
       }
     })
   }
