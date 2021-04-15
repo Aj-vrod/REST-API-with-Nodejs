@@ -6,6 +6,7 @@ const index = (req, res) => {
   const params = []
   db.all(query, params, (err, rows) => {
     checkErrors(err, res)
+    rows.forEach((row) => { row.room = JSON.parse(row.room) })
     res.status(200).json(rows)
   })
 }
@@ -15,6 +16,7 @@ const show = (req, res) => {
   const query = `SELECT id, (SELECT json_object('id', id, 'name', name) FROM rooms WHERE rooms.id = seats.room) AS room FROM seats WHERE id = ?`
   db.get(query, params, (err, row) => {
     checkErrors(err, res)
+    row.room = JSON.parse(row.room)
     res.status(200).json(row)
   })
 
