@@ -39,6 +39,9 @@ const create = (req, res, next) => {
       if (err) {
         res.status(500).json({"error": "A database error occurred"})
         return;
+      } else if (bookings.length === 0) {
+        res.status(404).json({ "error": "Seat not found" })
+        return;
       } else if (bookings) {
         if (bookings.filter(function(e) { return e.seat === parseInt(data.seat); }).length > 0) {
           res.status(400).json({ "error": "This seat is already taken" })
