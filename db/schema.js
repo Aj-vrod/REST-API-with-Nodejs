@@ -1,3 +1,9 @@
+// TABLES: USERS, ROOMS, SEATS, BOOKINGS
+//           id      id    id        id
+//           name   name  room_id    seat_id
+// profilePicture                    date
+//                                   user_id
+
 const createSchema = (db) => {
   console.log('Creating database with SQLite3...')
   db.run(`

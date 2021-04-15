@@ -1,3 +1,5 @@
+// CREATES TWO USERS, TWO ROOMS AND TWO SEATS FOR EACH ROOM
+
 const seeding = (db) => {
   console.log('Creating some rows...')
   const insertUser1 = 'INSERT OR IGNORE INTO users (name, profilePicture) VALUES (?,?)'
@@ -11,7 +13,11 @@ const seeding = (db) => {
   const insertSeat1 = 'INSERT INTO seats (room) VALUES (?)'
   db.run(insertSeat1, 1)
   const insertSeat2 = 'INSERT INTO seats (room) VALUES (?)'
-  db.run(insertSeat2, 2)
+  db.run(insertSeat2, 1)
+  const insertSeat3 = 'INSERT INTO seats (room) VALUES (?)'
+  db.run(insertSeat3, 2)
+  const insertSeat4 = 'INSERT INTO seats (room) VALUES (?)'
+  db.run(insertSeat4, 2)
 }
 
 module.exports = seeding

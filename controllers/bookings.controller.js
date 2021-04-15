@@ -60,34 +60,41 @@ const create = (req, res, next) => {
             res.status(404).json({ "error": "Seat not found" })
             return;
           }
-        })
+        });
       }
-    })
+    });
   }
 }
 
 const destroy = (req, res) => {
-  const params = [req.params.id]
-  db.get('SELECT user FROM bookings WHERE id = ?', params, (err, booking) => {
-    if (booking) {
-      const query = 'DELETE FROM bookings WHERE id = ?'
-      const booking_user_id = booking.user
-      const logged_user_id = req.userId
-      if (booking_user_id === logged_user_id) {
-        db.run(query, params, (err, result) => {
-          if(err) {
-            res.status(400).json({"error": "A database error occurred"})
-            return;
-          }
-          res.status(200).json({ "message": "deleted" })
-        });
+  if (req.params) {
+    const params = [req.params.id]
+    db.get('SELECT user FROM bookings WHERE id = ?', params, (err, booking) => {
+      if (booking) {
+        const query = 'DELETE FROM bookings WHERE id = ?'
+        const booking_user_id = booking.user
+        const logged_user_id = req.userId
+        if (booking_user_id === logged_user_id) {
+          db.run(query, params, (err, result) => {
+            if(err) {
+              res.status(400).json({"error": "A database error occurred"})
+              return;
+            }
+            res.status(200).json({ "message": "deleted" })
+          });
+        } else {
+          res.status(403).json({ "message": "403 Unauthorized action" })
+          return
+        }
       } else {
-        res.status(403).json({ "message": "403 Unauthorized action" })
+        res.status(404).json({ "message": "Booking not found" })
+        return
       }
-    } else {
-      res.status(404).json({ "message": "Booking not found" })
-    }
-  })
+    })
+  } else {
+    res.status(500).json({ "message": "Internal Server error" })
+    return
+  }
 }
 
 module.exports = {
