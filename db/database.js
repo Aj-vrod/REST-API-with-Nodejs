@@ -23,6 +23,6 @@ let db = new sqlite3.Database(DB, (error) => {
 });
 
 // CHECK! RUN AGAIN IF FOREIGN_KEYS RETURNS AN ERROR AT FIRST ATTEMPT
-//        NO ERROR FOUND IN CODE THAT CAUSE IT
+//        NO ERROR FOUND IN CODE THAT CAUSE IT, STILL, SOMETIMES IT FAILS
 
 module.exports = db
