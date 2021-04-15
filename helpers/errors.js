@@ -1,7 +1,7 @@
-// TO CHECK IF THERE ARE ANY ERRORS
+// FUNCTION TO CHECK ERRORS IN QUERIES
 const checkErrors = (err, res) => {
   if (err) {
-    res.status(400).json({"error": err.message})
+    res.status(400).json({"error": "A database error occurred"})
     return
   }
 }

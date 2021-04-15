@@ -4,7 +4,9 @@ const app = express()
 const path = require('path')
 const db = require(path.join(__dirname, 'db', 'database'))
 
-// USING BODY-PARSER TO PARSE BODY DATA FROM REQUESTS
+const verifyToken = require('./helpers/verifyToken')
+
+// USING BODY-PARSER TO PARSE BODY DATA FROM REQUESTS INTO JSON
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -31,7 +33,6 @@ app.get('/rest/seats/:id', seatsController.show)
 
 // BOOKINGS ROUTES
 const bookingsController = require('./controllers/bookings.controller')
-const verifyToken = require('./helpers/verifyToken')
 // GET BOOKINGS
 app.get('/rest/bookings', bookingsController.index)
 // GET BOOKING
