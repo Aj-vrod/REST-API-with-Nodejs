@@ -17,8 +17,14 @@ const index = (req, res) => {
   const query = `SELECT * FROM rooms WHERE id = ?`
   // TO RETRIEVE ALL DATA FROM ROOM INSTANCE
   db.get(query, params, (err, row) => {
-    checkErrors(err, res)
-    res.status(200).json(row)
+    if (row) {
+      checkErrors(err, res)
+      res.status(200).json(row)
+    } else {
+      // SO THE SERVER DOES NOT BREAK IF THERE ARE NO ROOMS
+      res.status(404).json({ "error": "Room not found"})
+      return;
+    }
   });
  }
 

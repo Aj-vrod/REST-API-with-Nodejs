@@ -36,7 +36,9 @@ const show = (req, res) => {
       row.user = JSON.parse(row.user)
       res.status(200).json(row)
     } else {
-      res.status(200).json({})
+      // SO THE SERVER DOES NOT BREAK IF THERE ARE NO BOOKINGS
+      res.status(404).json({ "error": "Booking not found"})
+      return;
     }
   })
 }
