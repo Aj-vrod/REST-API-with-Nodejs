@@ -25,3 +25,21 @@ const verifyToken = (req, res, next) => {
 }
 
 module.exports = verifyToken
+
+
+// POSSIBLE CODE TO CHECK BOOKING EXISTENCE
+// const checkBookingExistence = (req, res, next) => {
+//   query = 'SELECT * FROM bookings WHERE id = ?'
+//   const params = [req.params.id]
+//   db.get(query, params, (err, booking) => {
+//     if (err) {
+//       res.status(400).json({ "error": "A database error occurred" })
+//       return;
+//     } else if (typeof booking === "undefined") {
+//       res.status(404).json({ "error": "Booking not found" })
+//       return;
+//     } else {
+//       return true
+//     }
+//   })
+// }

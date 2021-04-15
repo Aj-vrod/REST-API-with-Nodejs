@@ -29,25 +29,25 @@ const create = (req, res, next) => {
       date: req.body.date,
       user: req.userId
     }
-    db.get('SELECT seat FROM bookings WHERE date = ?', data.date, (err, booking) => {
+    db.all('SELECT seat FROM bookings WHERE date = ?', data.date, (err, bookings) => {
       if (err) {
         res.status(500).json({"error": "A database error occurred"})
         return;
-      } else if (booking) {
-        if (booking.seat == data.seat) {
+      } else if (bookings) {
+        if (bookings.filter(function(e) { return e.seat === parseInt(data.seat); }).length > 0) {
           res.status(400).json({ "error": "This seat is already taken" })
-          return
-        }
-      }
-      const query = `INSERT INTO bookings (seat, date, user) VALUES (?,?,?)`
-      const params = [data.seat, data.date, data.user]
-      db.run(query, params, (err, result) => {
-        if (err) {
-          res.status(500).json({"error": "A database error occurred"})
           return;
         }
-        res.status(200).json(data)
-      });
+        const query = `INSERT INTO bookings (seat, date, user) VALUES (?,?,?)`
+        const params = [data.seat, data.date, data.user]
+        db.run(query, params, (err, result) => {
+          if (err) {
+            res.status(500).json({"error": "A database error occurred"})
+            return;
+          }
+          res.status(200).json(data)
+        });
+      }
     })
   }
 }
