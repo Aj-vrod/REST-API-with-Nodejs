@@ -12,7 +12,7 @@ const index = (req, res) => {
  }
 
  const show = (req, res) => {
-  // RSABE ROOM ID FROM HTTP REQUEST
+  // SAVE ROOM ID FROM HTTP REQUEST
   const params = [req.params.id]
   const query = `SELECT * FROM rooms WHERE id = ?`
   // TO RETRIEVE ALL DATA FROM ROOM INSTANCE

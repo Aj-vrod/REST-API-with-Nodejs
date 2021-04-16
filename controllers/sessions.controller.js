@@ -19,6 +19,7 @@ const login = (req, res) => {
       return
       // IF USER FOUND
     } else if (user.length) {
+      // SAVES USER ID
       jwt.sign({user: user, userId: user.id}, 'secretToken', (err, token) => {
         // SEND TOKEN
         res.json({

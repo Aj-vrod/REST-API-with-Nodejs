@@ -20,7 +20,7 @@ const checkInput = (req, res, next) => {
       }
       errors.push(error);
     }
-    // MUST HAVE THIS FORMAT TO USE WITH DATE FUNCTION
+    // MUST HAVE THIS FORMAT TO WORK WITH DATE FUNCTION
     const regex = new RegExp('[0-9]{4}-[0-9]{2}-[0-9]{1,2}$')
     if (!regex.test(req.body.date)) {
       error = {

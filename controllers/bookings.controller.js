@@ -52,12 +52,12 @@ const create = (req, res, next) => {
       date: req.body.date,
       user: req.userId
     }
-    // TO RETRIEVE ALL SEATS.ID BOOKED FOR THE DATE PROVIDED
+    // TO RETRIEVE ALL SEATS.ID OF BOOKINGS BOOKED FOR THE DATE PROVIDED
     db.all('SELECT seat FROM bookings WHERE date = ?', data.date, (err, bookings) => {
       if (err) {
         res.status(500).json({"error": "A database error occurred"})
         return;
-        // IN CASE THERE ARE, CHECKS IF ANY OF THEM IS THE SAME AS THE ONE PROVIDED TO BOOK
+        // IN CASE THERE ARE, CHECKS IF ANY OF THEM IS THE SAME AS THE ONE ASKED TO BOOK
       } else if (bookings.length > 0 && bookings.filter(function(e) { return e.seat === parseInt(data.seat); }).length > 0) {
         // IF IT IS, RETURNS ERROR
         res.status(400).json({ "error": "This seat is already taken" })
@@ -71,7 +71,9 @@ const create = (req, res, next) => {
             // IF THERE IS A MATCH, IT CREATES NEW BOOKING
           } else if (result) {
             const query = `INSERT INTO bookings (seat, date, user) VALUES (?,?,?)`
+            // STORES DATAHASH IN PARAMS
             const params = [data.seat, data.date, data.user]
+            // BOOKING CREATION
             db.run(query, params, (err, result) => {
               if (err) {
                 res.status(500).json({"error": "A database error occurred"})
@@ -97,7 +99,7 @@ const destroy = (req, res) => {
     const params = [req.params.id]
     // TO RETRIEVE USER.ID OF BOOKING SELECTED
     db.get('SELECT user FROM bookings WHERE id = ?', params, (err, booking) => {
-      // IF BOOKING EXISTE, MOVES ON TO NEXT CONDITION
+      // IF BOOKING EXISTS, MOVES ON TO NEXT CONDITION
       if (booking) {
         const query = 'DELETE FROM bookings WHERE id = ?'
         // GETS THE USERID FROM THE BOOKING INSTANCE RETRIEVED WITH QUERY

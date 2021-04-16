@@ -21,7 +21,7 @@ const show = (req, res) => {
   db.get(query, params, (err, row) => {
     if (row) {
       checkErrors(err, res)
-      // TRANSFOR STRING OF DATA RETRIEVED WITH QUERY INTO JSON
+      // TRANSFORM STRING OF DATA RETRIEVED WITH QUERY INTO JSON
       row.room = JSON.parse(row.room)
       res.status(200).json(row)
     } else {
