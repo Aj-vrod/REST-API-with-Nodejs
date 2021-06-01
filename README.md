@@ -1,4 +1,9 @@
 # REST-API-with-Nodejs
+
+<a href="https://twitter.com/VarelaAmmy" target="_blank">
+  <img src="https://img.shields.io/badge/Ammy's%20Twitter-Follow-blue">
+</a>
+
 A REST API for employees to book a seat in the office
 
 # Table of Contents
